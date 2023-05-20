@@ -100,3 +100,54 @@ fun MainCard() {
         }
     }
 }
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabLayout() {
+    val tabList = listOf("Hours", "Days")
+    val pagerState = rememberPagerState()
+    val tabIndex = pagerState.currentPage
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(
+        modifier = Modifier
+            .padding(
+                start = 8.dp,
+                end = 8.dp
+            )
+            .clip(RoundedCornerShape(10.dp)),
+
+        ) {
+        TabRow(
+            selectedTabIndex = tabIndex,
+            indicator = { position ->
+                TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, position))
+            },
+            backgroundColor = BlueLight,
+            contentColor = Color.White
+        ) {
+            tabList.forEachIndexed { index, text ->
+                Tab(
+                    selected = false,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    }, text = {
+                        Text(
+                            text = text,
+                            style = TextStyle(fontSize = 18.sp)
+                        )
+                    })
+            }
+        }
+        HorizontalPager(
+            count = tabList.size,
+            state = pagerState,
+            modifier = Modifier.weight(1.0f)
+        ) {
+                index ->
+
+        }
+    }
+}
